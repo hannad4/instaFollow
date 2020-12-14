@@ -8,7 +8,7 @@ Have you ever wished you could track if the people you follow on sites like Inst
 
 ## **Well, look no further!**
 
-InstaFollow is a python built bot that will do the hardwork for you. Just follow these simple steps:
+InstaFollow is a python built bot that will do the hard work for you. Just follow these simple steps:
 
  1. Type your username in the command line 
  
