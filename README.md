@@ -6,7 +6,7 @@ Do you often times find yourself fearing your *meaningless friendship status* wi
 
 Have you ever wished you could track if the people you follow on sites like Instagram are people *who actually follow you back?*
 
-## **Well, look no further!**
+**Well, look no further!**
 
 InstaFollow is a python built bot that will do the hard work for you. Just follow these simple steps:
 
