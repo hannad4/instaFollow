@@ -11,6 +11,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 
 import os    # Utilized only for knowing which command to use for clearing terminal (easy viewing for noobs)
+import getpass  # Utilized only for obtaining the users password without showing it out in the open
 
 
 def navigateProfile(browser): # User has definitely logged in. These elements undeniably exist, so no error handling is needed
@@ -48,7 +49,7 @@ def attemptLogin(userName, passWord, browser):
 
 def main(): 
     userName = input("\nEnter your instagram username. This is case sensitive:\n")
-    passWord = input("\nEnter your password. This will be used to log into your Instagram and will not be shared anywhere else:\n")
+    passWord = getpass.getpass("\nEnter your password. This will be used to log into your Instagram and will not be shared anywhere else. For privacy, typing your password will not move the cursor or show characters:\n")
 
     # Enabling experimental options to allow for a persistent browser to exist for the user even if program terminated
     chrome_options = Options() 
