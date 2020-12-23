@@ -9,15 +9,39 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException        
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
+from explicit import waiter
 
 import os    # Utilized only for knowing which command to use for clearing terminal (easy viewing for noobs)
 import getpass  # Utilized only for obtaining the users password without showing it out in the open
+import itertools # Utilized only for iteration through scraping process  
+
+def obtainFollowers(browser): 
+    follower_css = "ul div li:nth-child({}) a.notranslate"  # CSS's nth-child functionality lets you pick all follower children
+    for group in itertools.count(start=1, step=12):     # Step through 12 at a time to scroll follower list
+        for follower_index in range(group, group + 12):
+            yield waiter.find_element(browser, follower_css.format(follower_index)).text
+
+        # Keep last element from going stale    
+        last_follower = waiter.find_element(browser, follower_css.format(follower_index))   
+        browser.execute_script("arguments[0].scrollIntoView();", last_follower)
+
+def navigateToFollowers(browser): 
+    print("\nGathering your followers\n")
+    followerHREF = "/" + userName + "/followers/"
+    WebDriverWait(browser, WAIT_TIME_GLOBAL).until(EC.element_to_be_clickable((By.XPATH, '//a[@href="'+followerHREF+'"]'))).click() 
+    global followerList; 
+    followerList = []; 
+    for count, follower in enumerate(obtainFollowers(browser)):
+        # print("{}: {}".format(count, follower))
+        followerList.append(follower)
+    print("The follower list is: " + followerList)
 
 
 def navigateProfile(browser): # User has definitely logged in. These elements undeniably exist, so no error handling is needed
     print("Navigating to your profile...\n")
     WebDriverWait(browser, WAIT_TIME_GLOBAL).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='react-root']/section/nav/div[2]/div/div/div[3]/div/div[5]/span"))).click()
     WebDriverWait(browser, WAIT_TIME_GLOBAL).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='react-root']/section/nav/div[2]/div/div/div[3]/div/div[5]/div[2]/div[2]/div[2]/a[1]"))).click()
+    navigateToFollowers(browser); 
 
 
 def attemptLogin(userName, passWord, browser): 
@@ -34,20 +58,22 @@ def attemptLogin(userName, passWord, browser):
                 os.system('cls')
             else:
                 os.system('clear')
-            print("The login info you entered was incorrect\n")
+            print("\nThe login info you entered was incorrect\n")
             main()
         except:  # Assuming no slfErrorAlert loaded means login credentials accepted
-            print("Logged in successfully\n")
+            print("\nLogged in successfully\n")
             navigateProfile(browser)
 
     except Exception as e:
-        print("Something went wrong. The program has been halted\n")
-        print("You can provide the following error message to the developer:\n")
-        print(str(e))         
+        print("\nSomething went wrong. The program has been halted\n")
+        print("\nYou can provide the following error message to the developer:\n")
+        print("\n" + str(e) + "\n")         
         return
 
 
 def main(): 
+    global userName; 
+
     userName = input("\nEnter your instagram username. This is case sensitive:\n")
     passWord = getpass.getpass("\nEnter your password. This will be used to log into your Instagram and will not be shared anywhere else. For privacy, typing your password will not move the cursor or show characters:\n")
 
