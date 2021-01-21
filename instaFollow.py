@@ -95,10 +95,6 @@ def navigateToFollowers(browser):
 
 
 def navigateProfile(browser): # User has definitely logged in at this point. These elements exist for all users, so no error handling is needed
-    if os.name == 'nt':
-        os.system('cls')
-    else:
-        os.system('clear')
     greenPrint("\nNavigating to your profile...\n")
     WebDriverWait(browser, WAIT_TIME_GLOBAL).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='react-root']/section/nav/div[2]/div/div/div[3]/div/div[5]/span"))).click()
     WebDriverWait(browser, WAIT_TIME_GLOBAL).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='react-root']/section/nav/div[2]/div/div/div[3]/div/div[5]/div[2]/div[2]/div[2]/a[1]"))).click()
@@ -151,7 +147,8 @@ def main():
 
     greenPrint("\nAn automated browser will be opened. You may keep it in the background but DO NOT MINIMZE IT.\n\nPlease do not interfere with it while the program is running\n")
 
-    browser = webdriver.Chrome(executable_path=ChromeDriverManager().install())    
+    browser = webdriver.Chrome(executable_path=ChromeDriverManager().install())   
+    browser.delete_all_cookies()
     browser.get("https://www.instagram.com/")
     attemptLogin(userName, passWord, browser)
 
