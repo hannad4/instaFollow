@@ -15,7 +15,7 @@ InstaFollow is a python built bot that will do the hard work for you. Just type 
 
 
 # Downloading the Program
-The program can be downloaded at the releases page of this repository - just download the `.exe` file!<br><br>
+The program can be downloaded at the releases page of this repository. Just download the `.exe` file.<br><br>
 
 # Running the Program
 To run & use the program, follow these simple steps:
