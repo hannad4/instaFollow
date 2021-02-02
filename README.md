@@ -39,9 +39,7 @@ Best of all, this program is open source! You can see the exact code that was us
 <br><br>
 <h3><b>3. When attempting to run this program, my system notified me that it blocked a Trojan Virus. Why did this happen?</b><br></h3><br>
 UPDATE: AS OF 01/31/2021, INSTAFOLLOW HAS BEEN MANUALLY REVIEWED AND REMOVED FROM WINDOWS DEFENDER DETECTION. SEE SUBMISSION DETAILS
-[HERE](../blob/master/falsePositiveReview.png)
- 
- <br>
+[HERE](../blob/master/falsePositiveReview.png)<br><br>
 An antivirus program "detects" a virus in several ways, including analyzing a program's behavior and certificate signing. Since instaFollow is an unsigned program that automates a web browser, it will not be surprising for it to be detected as a "virus."
 <br><br>
 Additionally, <code>PyInstaller</code> is a python package that was utilized to freeze this program into the current release files. Executable files that are generated via PyInstaller will commonly be picked up by anti-virus programs as a false positive. 
