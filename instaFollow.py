@@ -6,6 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC   
+from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
 import os    # Utilized only for knowing which command to use for clearing terminal (easy viewing for noobs)
@@ -94,10 +95,17 @@ def navigateToFollowers(browser):
     navigateToFollowing(browser)
 
 
-def navigateProfile(browser): # User has definitely logged in at this point. These elements exist for all users, so no error handling is needed
+def navigateProfile(browser, userName): # User has definitely logged in at this point. These elements exist for all users, so no error handling is needed
     greenPrint("\nNavigating to your profile...\n")
-    WebDriverWait(browser, WAIT_TIME_GLOBAL).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='react-root']/section/nav/div[2]/div/div/div[3]/div/div[5]/span"))).click()
-    WebDriverWait(browser, WAIT_TIME_GLOBAL).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='react-root']/section/nav/div[2]/div/div/div[3]/div/div[5]/div[2]/div[2]/div[2]/a[1]"))).click()
+    #============METHOD 1 (OLD METHOD) - MANUALLY CLICK ON USER PROFILE ON EXISTING SITE ====================#
+    # WebDriverWait(browser, WAIT_TIME_GLOBAL).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='react-root']/section/nav/div[2]/div/div/div[3]/div/div[5]/span"))).click()
+    # WebDriverWait(browser, WAIT_TIME_GLOBAL).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='react-root']/section/nav/div[2]/div/div/div[3]/div/div[5]/div[2]/div[2]/div[2]/a[1]"))).click()
+
+
+    #===========METHOD 2 (BETTER METHOD) - NAVIGATE BROWSER TO INSTAGRAM LINK DIRECTLY. INSTAGRAM COOKIES/SESSION KEEPS USER FROM HAVING TO RE-LOGIN==#
+    newLink = "https://www.instagram.com/" + userName
+    browser.get(newLink)
+
     navigateToFollowers(browser) 
 
 
@@ -120,7 +128,7 @@ def attemptLogin(userName, passWord, browser):
             main()
         except:     # Assuming no slfErrorAlert loaded means login credentials accepted
             greenPrint("\nLogged in successfully\n")
-            navigateProfile(browser)
+            navigateProfile(browser, userName)
 
     except Exception as e:  # If something went wrong, this exception block will catch it & land the program gently instead of a messy crash
         greenPrint("\nSomething went wrong. The program has been halted\n")
@@ -146,8 +154,11 @@ def main():
     passWord = getpass.getpass('\33[45m' + "\nEnter your password. This will be used to log into your Instagram and will not be shared anywhere else. For privacy, typing your password will not move the cursor or show characters:\n" + '\033[0m')
 
     greenPrint("\nAn automated browser will be opened. You may keep it in the background but DO NOT MINIMZE IT.\n\nPlease do not interfere with it while the program is running\n")
-
-    browser = webdriver.Chrome(executable_path=ChromeDriverManager().install())   
+    chrome_options = Options()
+    chrome_options.add_experimental_option("detach", True)
+    chrome_options.add_argument("--incognito")
+    browser = webdriver.Chrome(executable_path=ChromeDriverManager().install()) 
+    
     browser.delete_all_cookies()
     browser.get("https://www.instagram.com/")
     attemptLogin(userName, passWord, browser)
